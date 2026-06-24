@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Contact RentHub.mv for rental marketplace support." />
+    <meta name="theme-color" content="#0066FF" />
+    <title>Contact | RentHub.mv</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="contact">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="top-nav">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>RentHub.mv</span>
+        </a>
+        <div class="nav-links" aria-label="Desktop navigation">
+          <a href="browse.html">Browse</a>
+          <a href="browse.html#categories">Categories</a>
+          <a href="list.html">List Item</a>
+          <a href="contact.html" aria-current="page">Contact</a>
+          <button class="icon-button theme-toggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero section-shell">
+        <p class="eyebrow">Contact</p>
+        <h1>Talk to RentHub.mv.</h1>
+        <p>Questions, owner verification, listing support, or partnership ideas. Send a message and we will get back to you.</p>
+      </section>
+
+      <section class="section-shell contact-layout" aria-label="Contact RentHub">
+        <form class="listing-form contact-form" data-contact-form>
+          <label>
+            <span>Name</span>
+            <input name="name" type="text" placeholder="Your name" required />
+          </label>
+          <label>
+            <span>Email or phone</span>
+            <input name="contact" type="text" placeholder="Email or WhatsApp number" required />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="6" placeholder="How can we help?" required></textarea>
+          </label>
+          <button class="button button-primary form-submit" type="submit">Send Message</button>
+          <p class="form-success" data-form-success hidden>Message draft received. Connect a backend to send it live.</p>
+        </form>
+
+        <aside class="contact-panel">
+          <article>
+            <span aria-hidden="true">&#9742;</span>
+            <h2>WhatsApp</h2>
+            <a href="https://wa.me/9607000000">+960 700 0000</a>
+          </article>
+          <article>
+            <span aria-hidden="true">&#9737;</span>
+            <h2>Instagram</h2>
+            <a href="https://www.instagram.com/">@renthub.mv</a>
+          </article>
+          <article>
+            <span aria-hidden="true">&#8962;</span>
+            <h2>Coverage</h2>
+            <p>Browse rentals across inhabited islands in Maldives.</p>
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-shell footer-inner">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>RentHub.mv</span>
+        </a>
+        <nav aria-label="Footer navigation">
+          <a href="browse.html">Browse</a>
+          <a href="browse.html#categories">Categories</a>
+          <a href="list.html">List Item</a>
+          <a href="contact.html">Contact</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </nav>
+        <p>&copy; 2026 RentHub.mv. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+      <a href="index.html" data-nav-page="home"><span aria-hidden="true">&#8962;</span>Home</a>
+      <a href="browse.html" data-nav-page="browse"><span aria-hidden="true">&#9638;</span>Browse</a>
+      <a href="list.html" data-nav-page="list"><span aria-hidden="true">&#65291;</span>List</a>
+      <a href="contact.html" data-nav-page="contact"><span aria-hidden="true">&#9993;</span>Contact</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span>Theme</span>
+      </button>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

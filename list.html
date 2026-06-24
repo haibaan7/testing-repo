@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="List your rental item on RentHub.mv." />
+    <meta name="theme-color" content="#0066FF" />
+    <title>List Your Item | RentHub.mv</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="list">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="top-nav">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>RentHub.mv</span>
+        </a>
+        <div class="nav-links" aria-label="Desktop navigation">
+          <a href="browse.html">Browse</a>
+          <a href="browse.html#categories">Categories</a>
+          <a href="list.html" aria-current="page">List Item</a>
+          <a href="contact.html">Contact</a>
+          <button class="icon-button theme-toggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="list-hero section-shell">
+        <p class="eyebrow">List Item</p>
+        <h1>List your rental item in minutes</h1>
+        <p>Share your equipment, boat, vehicle, or accommodation with renters across Maldives.</p>
+      </section>
+
+      <section class="section-shell list-layout" aria-label="List item form">
+        <form class="listing-form" data-list-form>
+          <label>
+            <span>Item title</span>
+            <input name="title" type="text" placeholder="e.g. GoPro Hero 11 Black" required />
+          </label>
+          <label>
+            <span>Category</span>
+            <select name="category" data-category-select required>
+              <option value="">Select category</option>
+            </select>
+          </label>
+          <label>
+            <span>Price</span>
+            <input name="price" type="text" placeholder="e.g. MVR 250 / day" required />
+          </label>
+          <label>
+            <span>Location</span>
+            <input name="location" list="island-options" placeholder="Search or select an island" required />
+            <datalist id="island-options" data-island-datalist></datalist>
+          </label>
+          <label>
+            <span>Contact number</span>
+            <input name="contact" type="tel" placeholder="e.g. 7873090" required />
+          </label>
+          <label>
+            <span>Upload photo</span>
+            <input name="photo" type="file" accept="image/*" />
+          </label>
+          <label>
+            <span>Description</span>
+            <textarea name="description" rows="4" placeholder="Add condition, pickup notes, and availability."></textarea>
+          </label>
+          <button class="button button-primary form-submit" type="submit">Submit Listing</button>
+          <p class="form-success" data-form-success hidden>Your listing draft is ready. Connect a backend to publish it live.</p>
+        </form>
+
+        <aside class="how-card" aria-label="How listing works">
+          <h2>How it works</h2>
+          <article>
+            <strong>1. Add your item</strong>
+            <p>Provide a title, price, location, and contact details so renters can find you.</p>
+          </article>
+          <article>
+            <strong>2. Stay responsive</strong>
+            <p>Reply quickly to WhatsApp and calls from interested renters.</p>
+          </article>
+          <article>
+            <strong>3. Get bookings</strong>
+            <p>Let renters know availability and finalise rental details directly.</p>
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-shell footer-inner">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>RentHub.mv</span>
+        </a>
+        <nav aria-label="Footer navigation">
+          <a href="browse.html">Browse</a>
+          <a href="browse.html#categories">Categories</a>
+          <a href="list.html">List Item</a>
+          <a href="contact.html">Contact</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </nav>
+        <p>&copy; 2026 RentHub.mv. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+      <a href="index.html" data-nav-page="home"><span aria-hidden="true">&#8962;</span>Home</a>
+      <a href="browse.html" data-nav-page="browse"><span aria-hidden="true">&#9638;</span>Browse</a>
+      <a href="list.html" data-nav-page="list"><span aria-hidden="true">&#65291;</span>List</a>
+      <a href="contact.html" data-nav-page="contact"><span aria-hidden="true">&#9993;</span>Contact</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
+        <span class="theme-icon" aria-hidden="true"></span>
+        <span>Theme</span>
+      </button>
+    </nav>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
