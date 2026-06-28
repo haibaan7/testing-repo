@@ -6,8 +6,891 @@
     <meta name="description" content="List your rental item on RentHub.mv." />
     <meta name="theme-color" content="#0066FF" />
     <title>List Your Item | RentHub.mv</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+  <style>
+/* ══════════════════════════════════════════
+   RENTHUB.MV — STYLES
+   ══════════════════════════════════════════ */
+
+/* ── tokens ── */
+:root {
+  color-scheme: light;
+  --blue: #0066ff;
+  --blue-soft: #4da3ff;
+  --bg: #ffffff;
+  --bg-elevated: rgba(255,255,255,0.92);
+  --bg-muted: #f7fbff;
+  --accent: #eaf3ff;
+  --text: #0b1220;
+  --text-muted: #5f6b7a;
+  --line: rgba(11,18,32,0.1);
+  --success: #16a34a;
+  --shadow-soft: 0 18px 48px rgba(21,51,97,0.12);
+  --shadow-hover: 0 24px 70px rgba(0,102,255,0.18);
+  --radius-lg: 24px;
+  --radius-md: 20px;
+  --radius-sm: 16px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --bg-elevated: rgba(17,24,39,0.92);
+  --bg-muted: #111827;
+  --accent: rgba(77,163,255,0.14);
+  --text: #f8fbff;
+  --text-muted: #b7c2d1;
+  --line: rgba(234,243,255,0.13);
+  --shadow-soft: 0 20px 52px rgba(0,0,0,0.28);
+  --shadow-hover: 0 26px 72px rgba(0,102,255,0.25);
+}
+
+/* ── reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(77,163,255,0.2), transparent 30rem),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-muted) 100%);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+img { display: block; max-width: 100%; }
+
+/* ── page transitions ── */
+body {
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+body.page-entering {
+  opacity: 0;
+  transform: translateY(10px);
+}
+body.page-entered {
+  opacity: 1;
+  transform: translateY(0);
+}
+body.page-leaving {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+}
+
+/* ── scroll reveal ── */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+.reveal-item.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-section .reveal-item:nth-child(1) { transition-delay: 0ms; }
+.reveal-section .reveal-item:nth-child(2) { transition-delay: 90ms; }
+.reveal-section .reveal-item:nth-child(3) { transition-delay: 180ms; }
+.reveal-section .reveal-item:nth-child(4) { transition-delay: 270ms; }
+.reveal-section .reveal-item:nth-child(5) { transition-delay: 360ms; }
+
+/* ══════════════════════════════════════════
+   HEADER & NAV
+   ══════════════════════════════════════════ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 10px max(14px, env(safe-area-inset-left)) 0;
+}
+
+.top-nav {
+  width: min(1160px, 100%);
+  min-height: 60px;
+  margin: 0 auto;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 850;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-soft));
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 900;
+  box-shadow: 0 8px 22px rgba(0,102,255,0.3);
+  flex-shrink: 0;
+}
+
+/* desktop nav — hidden on mobile */
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-links a,
+.icon-button {
+  min-height: 40px;
+  padding: 0 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.nav-links a:hover,
+.nav-links a.is-active,
+.icon-button:hover {
+  color: var(--text);
+  background: var(--accent);
+}
+
+/* mobile top-bar links (List + Contact + Theme) */
+.mobile-top-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mobile-top-links a {
+  min-height: 36px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--blue);
+  font-size: 0.82rem;
+  font-weight: 850;
+  transition: background 160ms ease;
+}
+
+.mobile-top-links a:hover { background: rgba(0,102,255,0.18); }
+
+.mobile-top-links .icon-button {
+  min-height: 36px;
+  width: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.theme-icon::before { content: "\263E"; }
+:root[data-theme="dark"] .theme-icon::before { content: "\2600"; }
+
+/* ══════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════ */
+
+.section-shell {
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.section-stack { padding: 52px 0; }
+.compact-stack { padding-bottom: 16px; }
+
+/* ══════════════════════════════════════════
+   BROWSE HERO (with character)
+   ══════════════════════════════════════════ */
+
+.browse-hero {
+  padding: 32px 0 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+  min-height: 220px;
+}
+
+.hero-copy { max-width: 580px; }
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--blue);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3, p { overflow-wrap: anywhere; }
+h1, h2, h3 { margin: 0; line-height: 1.05; }
+
+h1 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  max-width: 680px;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 6vw, 2.8rem);
+  max-width: 680px;
+}
+
+h3 { font-size: 1rem; }
+
+.hero-sub {
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  max-width: 480px;
+}
+
+/* character image */
+.hero-character {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 130px;
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.character-glow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 40px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(0,102,255,0.22), transparent 70%);
+  filter: blur(8px);
+}
+
+.hero-character img {
+  position: relative;
+  z-index: 1;
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 24px rgba(11,18,32,0.2));
+  animation: floaty 5s ease-in-out infinite;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ══════════════════════════════════════════
+   PAGE HEROES (list / contact)
+   ══════════════════════════════════════════ */
+
+.page-hero,
+.list-hero {
+  padding: 44px 0 16px;
+}
+
+.page-hero h1, .list-hero h1 { max-width: 760px; }
+.page-hero p, .list-hero p {
+  max-width: 640px;
+  margin: 12px 0 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+/* ══════════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════════ */
+
+.button {
+  min-height: 50px;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 850;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.button:hover { transform: translateY(-2px); }
+
+.button-primary {
+  background: linear-gradient(135deg, var(--blue), var(--blue-soft));
+  color: #fff;
+  box-shadow: 0 14px 34px rgba(0,102,255,0.28);
+}
+
+.button-secondary {
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--text);
+}
+
+/* ══════════════════════════════════════════
+   SEARCH BAR
+   (static on mobile, sticky on desktop)
+   ══════════════════════════════════════════ */
+
+.search-wrap {
+  position: static;
+  z-index: 18;
+  width: min(1160px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 8px 0 16px;
+}
+
+.search-panel {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.search-field {
+  min-height: 58px;
+  padding: 9px 13px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-muted);
+  display: grid;
+  gap: 4px;
+}
+
+.search-field span {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 850;
+}
+
+.search-field input,
+.search-field select,
+.listing-form input,
+.listing-form select,
+.listing-form textarea {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+.search-field select { appearance: none; }
+
+.search-button {
+  min-height: 52px;
+  border: 0;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(0,102,255,0.28);
+  transition: transform 160ms ease;
+}
+
+.search-button:hover { transform: translateY(-2px); }
+
+/* ══════════════════════════════════════════
+   SECTION HEADINGS
+   ══════════════════════════════════════════ */
+
+.section-heading { margin-bottom: 22px; }
+.split-heading { display: grid; gap: 12px; }
+
+.text-link, .text-button {
+  align-self: end;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font-weight: 850;
+  cursor: pointer;
+  text-align: left;
+}
+
+.result-count {
+  margin: 0;
+  align-self: end;
+  color: var(--text-muted);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+/* ══════════════════════════════════════════
+   CATEGORY GRID
+   ══════════════════════════════════════════ */
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.category-card {
+  min-height: 100px;
+  padding: 14px 12px;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  box-shadow: 0 8px 24px rgba(21,51,97,0.06);
+  font-weight: 850;
+  font-size: 0.88rem;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.compact-categories .category-card { min-height: 76px; }
+
+.category-card span {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--accent);
+  font-size: 1.2rem;
+}
+
+.category-card:hover,
+.category-card.is-selected {
+  transform: translateY(-4px);
+  border-color: rgba(0,102,255,0.28);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ══════════════════════════════════════════
+   LISTING GRID — 2 cols mobile, 3 desktop
+   ══════════════════════════════════════════ */
+
+.listing-grid, .trust-grid, .steps-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.listing-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ── rental card ── */
+.rental-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: 0 10px 28px rgba(21,51,97,0.08);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.rental-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,102,255,0.28);
+  box-shadow: var(--shadow-hover);
+}
+
+.rental-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+.favorite-button {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.86);
+  color: #0b1220;
+  font-size: 1rem;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  transition: background 160ms ease;
+}
+
+.favorite-button.is-active { background: var(--blue); color: #fff; }
+
+.rental-content { padding: 11px; }
+
+.rental-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--blue);
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.rental-meta strong { font-size: 0.85rem; }
+
+.rental-content h3 {
+  font-size: 0.88rem;
+  margin: 0 0 3px;
+  line-height: 1.25;
+}
+
+.rental-content > p {
+  margin: 3px 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.listing-description {
+  display: none;
+}
+
+.verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--success);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.whatsapp-button, .details-button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  font-weight: 850;
+  font-size: 0.76rem;
+  transition: transform 140ms ease;
+}
+
+.whatsapp-button:hover, .details-button:hover { transform: translateY(-1px); }
+.whatsapp-button { background: rgba(22,163,74,0.12); color: var(--success); }
+.details-button { background: var(--blue); color: #fff; }
+
+/* ── sheet status ── */
+.sheet-status {
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--blue);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.sheet-status.error {
+  background: rgba(220,38,38,0.1);
+  color: #dc2626;
+}
+
+/* ── empty state ── */
+.empty-state {
+  padding: 28px;
+  border: 1px dashed rgba(0,102,255,0.34);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  text-align: center;
+}
+
+.empty-state strong { display: block; font-size: 1.2rem; }
+.empty-state p { margin: 7px 0 0; color: var(--text-muted); }
+
+/* ══════════════════════════════════════════
+   FORMS (list + contact)
+   ══════════════════════════════════════════ */
+
+.list-layout, .contact-layout {
+  padding: 18px 0 80px;
+  display: grid;
+  gap: 24px;
+}
+
+.listing-form, .how-card, .contact-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-soft);
+}
+
+.listing-form {
+  padding: 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.listing-form label { display: grid; gap: 6px; }
+
+.listing-form label span {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.listing-form input,
+.listing-form select,
+.listing-form textarea {
+  min-height: 46px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-muted);
+  transition: border-color 160ms ease;
+}
+
+.listing-form input:focus,
+.listing-form select:focus,
+.listing-form textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+}
+
+.listing-form textarea { resize: vertical; }
+.form-submit { width: 100%; }
+
+.form-success {
+  margin: 0;
+  padding: 11px 13px;
+  border-radius: 12px;
+  background: rgba(22,163,74,0.12);
+  color: var(--success);
+  font-weight: 800;
+}
+
+.how-card, .contact-panel { padding: 22px; }
+.how-card h2 { font-size: clamp(1.5rem, 5vw, 1.9rem); }
+
+.how-card article, .contact-panel article {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--bg-muted);
+}
+
+.how-card article p, .contact-panel article p {
+  margin-bottom: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.contact-panel { display: grid; gap: 12px; }
+.contact-panel article { margin: 0; }
+
+.contact-panel span {
+  width: 42px; height: 42px;
+  margin-bottom: 10px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--blue);
+}
+
+.contact-panel h2 { font-size: 1.15rem; margin: 0 0 4px; }
+.contact-panel a { color: var(--blue); font-weight: 850; }
+
+/* ══════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════ */
+
+.site-footer {
+  padding: 34px 0 28px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.footer-inner { display: grid; gap: 18px; width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+
+.footer-inner nav {
+  display: flex; flex-wrap: wrap;
+  gap: 12px 16px;
+  color: var(--text-muted);
+  font-weight: 760;
+  font-size: 0.9rem;
+}
+
+.footer-inner p { margin: 0; color: var(--text-muted); font-size: 0.85rem; }
+
+/* ══════════════════════════════════════════
+   BOTTOM NAV (desktop only — hidden on mobile)
+   ══════════════════════════════════════════ */
+
+.bottom-nav {
+  display: none; /* hidden on mobile — we use top bar instead */
+}
+
+/* ══════════════════════════════════════════
+   REDUCED MOTION
+   ══════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal-item { opacity: 1; transform: none; }
+  body.page-entering, body.page-leaving { opacity: 1; transform: none; }
+  .hero-character img { animation: none; }
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════ */
+
+/* 480px — small phones get a bit more room */
+@media (min-width: 480px) {
+  .hero-character { width: 160px; }
+  .hero-character img { width: 148px; }
+  .rental-content { padding: 13px; }
+  .listing-description { display: block; font-size: 0.82rem; }
+}
+
+/* 640px — tablet */
+@media (min-width: 640px) {
+  .section-shell, .search-wrap {
+    width: min(1160px, calc(100% - 48px));
+  }
+
+  .browse-hero {
+    padding: 44px 0 24px;
+    min-height: 260px;
+  }
+
+  .hero-character { width: 200px; }
+  .hero-character img { width: 185px; }
+
+  .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .list-layout, .contact-layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+    align-items: start;
+  }
+
+  .rental-content { padding: 14px; }
+  .listing-description { display: block; }
+}
+
+/* 860px — desktop */
+@media (min-width: 860px) {
+  /* hide mobile top links, show desktop nav */
+  .mobile-top-links { display: none; }
+  .nav-links { display: flex; }
+
+  /* search sticky on desktop */
+  .search-wrap {
+    position: sticky;
+    top: 80px;
+  }
+
+  .browse-hero {
+    padding: 56px 0 28px;
+    gap: 32px;
+    min-height: 300px;
+  }
+
+  .hero-character { width: 260px; }
+  .hero-character img { width: 240px; }
+
+  h1 { font-size: clamp(3rem, 5.5vw, 4.8rem); }
+
+  .search-panel {
+    grid-template-columns: 1.2fr 0.8fr 0.95fr auto;
+    align-items: center;
+    border-radius: 999px;
+  }
+
+  .search-field { border-radius: 999px; }
+  .search-button { min-width: 136px; border-radius: 999px; }
+
+  .split-heading { grid-template-columns: 1fr auto; align-items: end; }
+
+  .listing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .category-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+  .site-footer { padding-bottom: 42px; }
+  .listing-description { display: block; }
+}
+
+/* 1080px — wide */
+@media (min-width: 1080px) {
+  .hero-character { width: 320px; }
+  .hero-character img { width: 300px; }
+}
+
+/* very small phones */
+@media (max-width: 360px) {
+  .section-shell, .search-wrap { width: calc(100% - 20px); }
+  h1 { font-size: clamp(1.8rem, 10vw, 2.4rem); }
+  .hero-character { width: 100px; }
+  .hero-character img { width: 90px; }
+  .listing-form, .how-card, .contact-panel { padding: 14px; }
+}
+</style>
+</head>
   <body data-page="list">
     <header class="site-header" aria-label="Primary navigation">
       <nav class="top-nav">
@@ -15,9 +898,15 @@
           <span class="brand-mark" aria-hidden="true">R</span>
           <span>RentHub.mv</span>
         </a>
+        <div class="mobile-top-links">
+          <a href="index.html">Browse</a>
+          <a href="contact.html">Contact</a>
+          <button class="icon-button theme-toggle" type="button" aria-label="Toggle dark mode">
+            <span class="theme-icon" aria-hidden="true"></span>
+          </button>
+        </div>
         <div class="nav-links" aria-label="Desktop navigation">
           <a href="index.html">Browse</a>
-          <a href="index.html#categories">Categories</a>
           <a href="list.html">List Item</a>
           <a href="contact.html">Contact</a>
           <button class="icon-button theme-toggle" type="button" aria-label="Toggle dark mode">
@@ -104,18 +993,750 @@
         <p>&copy; 2026 RentHub.mv. All rights reserved.</p>
       </div>
     </footer>
+  
+<script>
+window.RENTHUB_DATA = {
+  categories: [
+    { value: "Accommodation", label: "Accommodation", icon: "&#127968;" },
+    { value: "Vehicles", label: "Vehicles", icon: "&#128663;" },
+    { value: "Cameras", label: "Cameras", icon: "&#128247;" },
+    { value: "Gaming", label: "Gaming", icon: "&#127918;" },
+    { value: "Audio", label: "Audio", icon: "&#128266;" },
+    { value: "Tools", label: "Tools", icon: "&#128736;" },
+    { value: "Event Equipment", label: "Event Equipment", icon: "&#127881;" },
+    { value: "Electronics", label: "Electronics", icon: "&#128187;" },
+    { value: "Boats & Marine", label: "Boats & Marine", icon: "&#9973;" },
+    { value: "Sports & Fitness", label: "Sports & Fitness", icon: "&#9917;" },
+    { value: "Furniture", label: "Furniture", icon: "&#128715;" },
+    { value: "Fashion", label: "Fashion", icon: "&#128087;" }
+  ],
+  islands: [
+    { atoll: "MLE", name: "Male'" },
+    { atoll: "MLE", name: "Hulhumale'" },
+    { atoll: "MLE", name: "Villimale'" },
+    { atoll: "HA", name: "Baarah" },
+    { atoll: "HA", name: "Dhiddhoo" },
+    { atoll: "HA", name: "Filladhoo" },
+    { atoll: "HA", name: "Hoarafushi" },
+    { atoll: "HA", name: "Ihavandhoo" },
+    { atoll: "HA", name: "Kelaa" },
+    { atoll: "HA", name: "Maarandhoo" },
+    { atoll: "HA", name: "Mulhadhoo" },
+    { atoll: "HA", name: "Muraidhoo" },
+    { atoll: "HA", name: "Thakandhoo" },
+    { atoll: "HA", name: "Thuraakunu" },
+    { atoll: "HA", name: "Uligamu" },
+    { atoll: "HA", name: "Utheemu" },
+    { atoll: "HA", name: "Vashafaru" },
+    { atoll: "HDh", name: "Finey" },
+    { atoll: "HDh", name: "Hanimaadhoo" },
+    { atoll: "HDh", name: "Hirimaradhoo" },
+    { atoll: "HDh", name: "Kulhudhuffushi" },
+    { atoll: "HDh", name: "Kumundhoo" },
+    { atoll: "HDh", name: "Kurinbi" },
+    { atoll: "HDh", name: "Makunudhoo" },
+    { atoll: "HDh", name: "Naivaadhoo" },
+    { atoll: "HDh", name: "Nellaidhoo" },
+    { atoll: "HDh", name: "Neykurendhoo" },
+    { atoll: "HDh", name: "Nolhivaramu" },
+    { atoll: "HDh", name: "Nolhivaranfaru" },
+    { atoll: "HDh", name: "Vaikaradhoo" },
+    { atoll: "Sh", name: "Bileffahi" },
+    { atoll: "Sh", name: "Feevah" },
+    { atoll: "Sh", name: "Feydhoo" },
+    { atoll: "Sh", name: "Foakaidhoo" },
+    { atoll: "Sh", name: "Funadhoo" },
+    { atoll: "Sh", name: "Goidhoo" },
+    { atoll: "Sh", name: "Kanditheemu" },
+    { atoll: "Sh", name: "Komandoo" },
+    { atoll: "Sh", name: "Lhaimagu" },
+    { atoll: "Sh", name: "Maaungoodhoo" },
+    { atoll: "Sh", name: "Maroshi" },
+    { atoll: "Sh", name: "Milandhoo" },
+    { atoll: "Sh", name: "Narudhoo" },
+    { atoll: "Sh", name: "Noomaraa" },
+    { atoll: "N", name: "Foddhoo" },
+    { atoll: "N", name: "Henbadhoo" },
+    { atoll: "N", name: "Holhudhoo" },
+    { atoll: "N", name: "Kendhikulhudhoo" },
+    { atoll: "N", name: "Kudafari" },
+    { atoll: "N", name: "Landhoo" },
+    { atoll: "N", name: "Lhohi" },
+    { atoll: "N", name: "Maafaru" },
+    { atoll: "N", name: "Maalhendhoo" },
+    { atoll: "N", name: "Magoodhoo" },
+    { atoll: "N", name: "Manadhoo" },
+    { atoll: "N", name: "Miladhoo" },
+    { atoll: "N", name: "Velidhoo" },
+    { atoll: "R", name: "Alifushi" },
+    { atoll: "R", name: "Angolhitheemu" },
+    { atoll: "R", name: "Dhuvaafaru" },
+    { atoll: "R", name: "Fainu" },
+    { atoll: "R", name: "Hulhudhuffaaru" },
+    { atoll: "R", name: "Inguraidhoo" },
+    { atoll: "R", name: "Innamaadhoo" },
+    { atoll: "R", name: "Kinolhas" },
+    { atoll: "R", name: "Maakurathu" },
+    { atoll: "R", name: "Maduvvaree" },
+    { atoll: "R", name: "Meedhoo" },
+    { atoll: "R", name: "Rasgetheemu" },
+    { atoll: "R", name: "Rasmaadhoo" },
+    { atoll: "R", name: "Ungoofaaru" },
+    { atoll: "R", name: "Vaadhoo" },
+    { atoll: "B", name: "Dharavandhoo" },
+    { atoll: "B", name: "Dhonfanu" },
+    { atoll: "B", name: "Eydhafushi" },
+    { atoll: "B", name: "Fehendhoo" },
+    { atoll: "B", name: "Fulhadhoo" },
+    { atoll: "B", name: "Goidhoo" },
+    { atoll: "B", name: "Hithaadhoo" },
+    { atoll: "B", name: "Kamadhoo" },
+    { atoll: "B", name: "Kendhoo" },
+    { atoll: "B", name: "Kihaadhoo" },
+    { atoll: "B", name: "Kudarikilu" },
+    { atoll: "B", name: "Maalhos" },
+    { atoll: "B", name: "Thulhaadhoo" },
+    { atoll: "Lh", name: "Hinnavaru" },
+    { atoll: "Lh", name: "Kurendhoo" },
+    { atoll: "Lh", name: "Maafilaafushi" },
+    { atoll: "Lh", name: "Naifaru" },
+    { atoll: "Lh", name: "Olhuvelifushi" },
+    { atoll: "Lh", name: "Ookolhufinolhu" },
+    { atoll: "K", name: "Dhiffushi" },
+    { atoll: "K", name: "Gaafaru" },
+    { atoll: "K", name: "Gulhi" },
+    { atoll: "K", name: "Guraidhoo" },
+    { atoll: "K", name: "Himmafushi" },
+    { atoll: "K", name: "Hulhumale'" },
+    { atoll: "K", name: "Huraa" },
+    { atoll: "K", name: "Kaashidhoo" },
+    { atoll: "K", name: "Maafushi" },
+    { atoll: "K", name: "Male'" },
+    { atoll: "K", name: "Thulusdhoo" },
+    { atoll: "K", name: "Villimale'" },
+    { atoll: "AA", name: "Bodufolhudhoo" },
+    { atoll: "AA", name: "Feridhoo" },
+    { atoll: "AA", name: "Fesdhoo" },
+    { atoll: "AA", name: "Himandhoo" },
+    { atoll: "AA", name: "Maalhos" },
+    { atoll: "AA", name: "Mathiveri" },
+    { atoll: "AA", name: "Rasdhoo" },
+    { atoll: "AA", name: "Thoddoo" },
+    { atoll: "AA", name: "Ukulhas" },
+    { atoll: "ADh", name: "Dhangethi" },
+    { atoll: "ADh", name: "Dhiddhoo" },
+    { atoll: "ADh", name: "Dhigurah" },
+    { atoll: "ADh", name: "Fenfushi" },
+    { atoll: "ADh", name: "Hangnaameedhoo" },
+    { atoll: "ADh", name: "Kunburudhoo" },
+    { atoll: "ADh", name: "Maamigili" },
+    { atoll: "ADh", name: "Mahibadhoo" },
+    { atoll: "ADh", name: "Mandhoo" },
+    { atoll: "ADh", name: "Omadhoo" },
+    { atoll: "V", name: "Felidhoo" },
+    { atoll: "V", name: "Fulidhoo" },
+    { atoll: "V", name: "Keyodhoo" },
+    { atoll: "V", name: "Rakeedhoo" },
+    { atoll: "V", name: "Thinadhoo" },
+    { atoll: "M", name: "Dhiggaru" },
+    { atoll: "M", name: "Kolhufushi" },
+    { atoll: "M", name: "Maduvvaree" },
+    { atoll: "M", name: "Mulah" },
+    { atoll: "M", name: "Muli" },
+    { atoll: "M", name: "Naalaafushi" },
+    { atoll: "M", name: "Raimmandhoo" },
+    { atoll: "M", name: "Veyvah" },
+    { atoll: "F", name: "Bileddhoo" },
+    { atoll: "F", name: "Dharanboodhoo" },
+    { atoll: "F", name: "Feeali" },
+    { atoll: "F", name: "Magoodhoo" },
+    { atoll: "F", name: "Nilandhoo" },
+    { atoll: "Dh", name: "Bandidhoo" },
+    { atoll: "Dh", name: "Hulhudheli" },
+    { atoll: "Dh", name: "Kudahuvadhoo" },
+    { atoll: "Dh", name: "Maaenboodhoo" },
+    { atoll: "Dh", name: "Meedhoo" },
+    { atoll: "Dh", name: "Rinbudhoo" },
+    { atoll: "Dh", name: "Vaanee" },
+    { atoll: "Th", name: "Burunee" },
+    { atoll: "Th", name: "Dhiyamingili" },
+    { atoll: "Th", name: "Gaadhiffushi" },
+    { atoll: "Th", name: "Guraidhoo" },
+    { atoll: "Th", name: "Hirilandhoo" },
+    { atoll: "Th", name: "Kandoodhoo" },
+    { atoll: "Th", name: "Kinbidhoo" },
+    { atoll: "Th", name: "Madifushi" },
+    { atoll: "Th", name: "Omadhoo" },
+    { atoll: "Th", name: "Thimarafushi" },
+    { atoll: "Th", name: "Vandhoo" },
+    { atoll: "Th", name: "Veymandoo" },
+    { atoll: "Th", name: "Vilufushi" },
+    { atoll: "L", name: "Dhanbidhoo" },
+    { atoll: "L", name: "Fonadhoo" },
+    { atoll: "L", name: "Gan" },
+    { atoll: "L", name: "Hithadhoo" },
+    { atoll: "L", name: "Isdhoo" },
+    { atoll: "L", name: "Kalaidhoo" },
+    { atoll: "L", name: "Kunahandhoo" },
+    { atoll: "L", name: "Maabaidhoo" },
+    { atoll: "L", name: "Maamendhoo" },
+    { atoll: "L", name: "Maavah" },
+    { atoll: "GA", name: "Dhaandhoo" },
+    { atoll: "GA", name: "Dhevvadhoo" },
+    { atoll: "GA", name: "Gemanafushi" },
+    { atoll: "GA", name: "Kanduhulhudhoo" },
+    { atoll: "GA", name: "Kolamaafushi" },
+    { atoll: "GA", name: "Kondey" },
+    { atoll: "GA", name: "Maamendhoo" },
+    { atoll: "GA", name: "Nilandhoo" },
+    { atoll: "GA", name: "Villingili" },
+    { atoll: "GDh", name: "Fares-Maathodaa" },
+    { atoll: "GDh", name: "Fiyoaree" },
+    { atoll: "GDh", name: "Gadhdhoo" },
+    { atoll: "GDh", name: "Hoandeddhoo" },
+    { atoll: "GDh", name: "Madaveli" },
+    { atoll: "GDh", name: "Nadellaa" },
+    { atoll: "GDh", name: "Rathafandhoo" },
+    { atoll: "GDh", name: "Thinadhoo" },
+    { atoll: "GDh", name: "Vaadhoo" },
+    { atoll: "Gn", name: "Fuvahmulah" },
+    { atoll: "S", name: "Feydhoo" },
+    { atoll: "S", name: "Hithadhoo" },
+    { atoll: "S", name: "Hulhudhoo" },
+    { atoll: "S", name: "Maradhoo" },
+    { atoll: "S", name: "Maradhoo-Feydhoo" },
+    { atoll: "S", name: "Meedhoo" }
+  ],
+  listings: [
+    {
+      title: "Sony Alpha Creator Kit",
+      category: "Cameras",
+      price: "MVR 450/day",
+      location: "Male' (K)",
+      image: "assets/listing-camera.png",
+      description: "Camera body, portrait lens, batteries, tripod, and creator accessories.",
+      phone: "9607000000"
+    },
+    {
+      title: "Lagoon View Apartment",
+      category: "Accommodation",
+      price: "MVR 1,800/day",
+      location: "Hulhumale' (K)",
+      image: "assets/listing-apartment.png",
+      description: "Bright apartment near the beach with verified owner contact.",
+      phone: "9607000001"
+    },
+    {
+      title: "Island Ready Compact Car",
+      category: "Vehicles",
+      price: "MVR 650/day",
+      location: "Hithadhoo (S)",
+      image: "assets/listing-car.png",
+      description: "Comfortable compact car for local errands and family trips.",
+      phone: "9607000002"
+    },
+    {
+      title: "DJI Aerial Shoot Kit",
+      category: "Electronics",
+      price: "MVR 520/day",
+      location: "Maafushi (K)",
+      image: "assets/listing-drone.png",
+      description: "Drone kit with spare batteries for island shoots and events.",
+      phone: "9607000003"
+    },
+    {
+      title: "Event Speaker Pair",
+      category: "Audio",
+      price: "MVR 350/day",
+      location: "Male' (K)",
+      image: "assets/listing-speaker.png",
+      description: "Two powered speakers for birthdays, meetings, and pop-up events.",
+      phone: "9607000004"
+    },
+    {
+      title: "4K Meeting Projector",
+      category: "Event Equipment",
+      price: "MVR 290/day",
+      location: "Hulhumale' (K)",
+      image: "assets/listing-projector.png",
+      description: "Portable projector with HDMI cable and compact carry case.",
+      phone: "9607000005"
+    },
+    {
+      title: "PlayStation 5 Bundle",
+      category: "Gaming",
+      price: "MVR 300/day",
+      location: "Thulusdhoo (K)",
+      image: "assets/listing-projector.png",
+      description: "Console, two controllers, and party games for weekend rental.",
+      phone: "9607000006"
+    },
+    {
+      title: "Cordless Tool Set",
+      category: "Tools",
+      price: "MVR 180/day",
+      location: "Kulhudhuffushi (HDh)",
+      image: "assets/listing-speaker.png",
+      description: "Drill, driver, charger, and essential bits for home projects.",
+      phone: "9607000007"
+    },
+    {
+      title: "Speedboat Day Charter",
+      category: "Boats & Marine",
+      price: "MVR 4,500/day",
+      location: "Maafushi (K)",
+      image: "assets/listing-car.png",
+      description: "Boat rental with captain for nearby transfers and day trips.",
+      phone: "9607000008"
+    },
+    {
+      title: "MacBook Pro Workstation",
+      category: "Electronics",
+      price: "MVR 420/day",
+      location: "Villimale' (K)",
+      image: "assets/listing-camera.png",
+      description: "Laptop rental for editing, presentations, and short-term work.",
+      phone: "9607000009"
+    }
+  ]
+};
+</script>
+<script>
+/* ══════════════════════════════════════════
+   RENTHUB.MV — APP.JS
+   Supports:
+   1. Static data from data.js (fallback)
+   2. Live data from Google Sheets CSV
+   ══════════════════════════════════════════
 
-    <nav class="bottom-nav" aria-label="Mobile navigation">
-      <a href="index.html" data-nav-page="browse"><span aria-hidden="true">&#9638;</span>Browse</a>
-      <a href="list.html" data-nav-page="list"><span aria-hidden="true">&#65291;</span>List</a>
-      <a href="contact.html" data-nav-page="contact"><span aria-hidden="true">&#9993;</span>Contact</a>
-      <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
-        <span class="theme-icon" aria-hidden="true"></span>
-        <span>Theme</span>
-      </button>
-    </nav>
+   HOW TO CONNECT A GOOGLE SHEET:
+   ─────────────────────────────────────────
+   1. Open your Google Sheet
+   2. File → Share → Publish to web
+   3. Choose "Comma-separated values (.csv)" and click Publish
+   4. Copy the URL — it looks like:
+      https://docs.google.com/spreadsheets/d/SHEET_ID/pub?output=csv
+   5. Paste it into SHEET_CSV_URL below
 
-    <script src="data.js"></script>
-    <script src="app.js"></script>
-  </body>
+   REQUIRED COLUMNS (exact header names):
+   title, category, price, location, image, description, phone
+
+   Optional columns:
+   verified (any value = verified)
+   ══════════════════════════════════════════ */
+
+const SHEET_CSV_URL = ""; // ← paste your Google Sheets CSV URL here
+
+/* ── state ── */
+const root = document.documentElement;
+const page = document.body.dataset.page || "browse";
+let activeListings = [];
+
+/* ── utilities ── */
+function escapeHtml(v) {
+  return String(v).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+  );
+}
+
+function normalise(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
+function setSelectValue(select, value) {
+  if (!select || !value) return;
+  const match = [...select.options].find(
+    (o) => normalise(o.value) === normalise(value)
+  );
+  if (match) select.value = match.value;
+}
+
+/* ── theme ── */
+function setTheme(theme) {
+  root.dataset.theme = theme;
+  try { localStorage.setItem("renthub-theme", theme); } catch (_) {}
+}
+
+function setupTheme() {
+  let saved = "";
+  try { saved = localStorage.getItem("renthub-theme") || ""; } catch (_) {}
+  const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  setTheme(saved || (dark ? "dark" : "light"));
+  document.querySelectorAll(".theme-toggle").forEach((btn) =>
+    btn.addEventListener("click", () =>
+      setTheme(root.dataset.theme === "dark" ? "light" : "dark")
+    )
+  );
+}
+
+/* ── active nav ── */
+function setupActiveNav() {
+  document.querySelectorAll(`[data-nav-page="${page}"]`).forEach((el) =>
+    el.classList.add("is-active")
+  );
+}
+
+/* ══════════════════════════════════════════
+   GOOGLE SHEETS CSV LOADER
+   ══════════════════════════════════════════ */
+
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+
+  // Parse a single CSV line handling quoted fields
+  function parseLine(line) {
+    const fields = [];
+    let cur = "";
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+        else inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        fields.push(cur.trim());
+        cur = "";
+      } else {
+        cur += ch;
+      }
+    }
+    fields.push(cur.trim());
+    return fields;
+  }
+
+  const headers = parseLine(lines[0]).map((h) => h.toLowerCase().trim());
+
+  return lines.slice(1)
+    .filter((l) => l.trim())
+    .map((line) => {
+      const values = parseLine(line);
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (values[i] || "").trim(); });
+      return obj;
+    })
+    .filter((row) => row.title); // skip empty rows
+}
+
+function showSheetStatus(msg, isError = false) {
+  const el = document.getElementById("sheet-status");
+  if (!el) return;
+  el.textContent = msg;
+  el.hidden = false;
+  el.className = "sheet-status" + (isError ? " error" : "");
+  if (!isError) setTimeout(() => { el.hidden = true; }, 4000);
+}
+
+async function loadFromSheet() {
+  if (!SHEET_CSV_URL) return false;
+
+  showSheetStatus("⏳ Loading listings from Google Sheets…");
+
+  try {
+    const res = await fetch(SHEET_CSV_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    const rows = parseCSV(text);
+
+    if (!rows.length) {
+      showSheetStatus("⚠️ Sheet loaded but no rows found. Check column headers.", true);
+      return false;
+    }
+
+    // Map CSV rows → listing objects
+    window.RENTHUB_DATA.listings = rows.map((r) => ({
+      title: r.title || "",
+      category: r.category || "",
+      price: r.price || "",
+      location: r.location || "",
+      image: r.image || "assets/listing-camera.png",
+      description: r.description || "",
+      phone: r.phone || "",
+      verified: !!r.verified
+    }));
+
+    showSheetStatus(`✓ ${rows.length} listings loaded from Google Sheets`);
+    return true;
+  } catch (err) {
+    showSheetStatus(`⚠️ Could not load sheet: ${err.message}. Showing local data.`, true);
+    return false;
+  }
+}
+
+/* ══════════════════════════════════════════
+   POPULATE UI
+   ══════════════════════════════════════════ */
+
+function islandLabel(island) {
+  return `${island.name} (${island.atoll})`;
+}
+
+function populateCategorySelects() {
+  const cats = window.RENTHUB_DATA.categories || [];
+  document.querySelectorAll("[data-category-select]").forEach((sel) => {
+    const cur = sel.value;
+    const first = sel.querySelector("option")?.outerHTML || '<option value="">All categories</option>';
+    sel.innerHTML = first + cats
+      .map((c) => `<option value="${escapeHtml(c.value)}">${escapeHtml(c.label)}</option>`)
+      .join("");
+    sel.value = cur;
+  });
+}
+
+function populateLocations() {
+  const islands = window.RENTHUB_DATA.islands || [];
+
+  // Group by atoll
+  const grouped = {};
+  islands.forEach((i) => {
+    if (!grouped[i.atoll]) grouped[i.atoll] = [];
+    grouped[i.atoll].push(i);
+  });
+
+  const groupedHtml = Object.entries(grouped)
+    .map(([atoll, list]) =>
+      `<optgroup label="Atoll ${atoll}">${list
+        .map((i) => {
+          const lbl = islandLabel(i);
+          return `<option value="${escapeHtml(lbl)}">${escapeHtml(lbl)}</option>`;
+        })
+        .join("")}</optgroup>`
+    )
+    .join("");
+
+  const flatHtml = islands
+    .map((i) => {
+      const lbl = islandLabel(i);
+      return `<option value="${escapeHtml(lbl)}"></option>`;
+    })
+    .join("");
+
+  document.querySelectorAll("[data-location-select]").forEach((sel) => {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Any island</option>' + groupedHtml;
+    sel.value = cur;
+  });
+
+  document.querySelectorAll("[data-island-datalist]").forEach((dl) => {
+    dl.innerHTML = flatHtml;
+  });
+}
+
+function populateCategoryGrids() {
+  const cats = window.RENTHUB_DATA.categories || [];
+  document.querySelectorAll("[data-category-grid]").forEach((grid) => {
+    grid.innerHTML = cats
+      .map((c) =>
+        `<a class="category-card" href="index.html?category=${encodeURIComponent(c.value)}" data-category-link="${escapeHtml(c.value)}">
+          <span aria-hidden="true">${c.icon}</span>
+          ${escapeHtml(c.label)}
+        </a>`
+      )
+      .join("");
+  });
+}
+
+/* ── listing card ── */
+function listingCard(listing) {
+  const words = [listing.title, listing.category, listing.location, listing.description].join(" ");
+  const verifiedBadge = listing.verified !== false
+    ? `<span class="verified">&#10003; Verified owner</span>` : "";
+  return `
+    <article class="rental-card reveal-item" data-search-text="${escapeHtml(words)}">
+      <button class="favorite-button" type="button" aria-label="Save ${escapeHtml(listing.title)}">&#9825;</button>
+      <img src="${escapeHtml(listing.image)}" alt="${escapeHtml(listing.title)}" loading="lazy"
+           onerror="this.src='assets/listing-camera.png'" />
+      <div class="rental-content">
+        <div class="rental-meta">
+          <span class="badge">${escapeHtml(listing.category)}</span>
+          <strong>${escapeHtml(listing.price)}</strong>
+        </div>
+        <h3>${escapeHtml(listing.title)}</h3>
+        <p>${escapeHtml(listing.location)}</p>
+        ${verifiedBadge}
+        <p class="listing-description">${escapeHtml(listing.description)}</p>
+        <div class="card-actions">
+          <a class="whatsapp-button" href="https://wa.me/${escapeHtml(listing.phone)}">WhatsApp</a>
+          <a class="details-button" href="contact.html">View Details</a>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderListings(listings) {
+  activeListings = listings;
+  document.querySelectorAll("[data-listings]").forEach((grid) => {
+    const limit = Number(grid.dataset.limit || listings.length);
+    grid.innerHTML = listings.slice(0, limit).map(listingCard).join("");
+  });
+  setupFavorites();
+  setupRevealObserver();
+}
+
+/* ── filtering ── */
+function currentFilters(form) {
+  const d = new FormData(form);
+  return {
+    query: String(d.get("query") || "").trim(),
+    category: String(d.get("category") || "").trim(),
+    location: String(d.get("location") || "").trim()
+  };
+}
+
+function filterListings(filters) {
+  const listings = window.RENTHUB_DATA.listings || [];
+  return listings.filter((l) => {
+    const text = normalise([l.title, l.category, l.location, l.description].join(" "));
+    const qOk = !filters.query || text.includes(normalise(filters.query));
+    const cOk = !filters.category || normalise(l.category) === normalise(filters.category);
+    // location: match "Island (Atoll)" or just the island name part
+    const loc = normalise(l.location);
+    const fLoc = normalise(filters.location);
+    const fLocName = normalise(filters.location.replace(/\s*\(.*\)$/, ""));
+    const lOk = !filters.location || loc === fLoc || loc.startsWith(fLocName);
+    return qOk && cOk && lOk;
+  });
+}
+
+function setBrowseUrl(filters) {
+  const p = new URLSearchParams();
+  if (filters.query) p.set("q", filters.query);
+  if (filters.category) p.set("category", filters.category);
+  if (filters.location) p.set("location", filters.location);
+  const qs = p.toString();
+  history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+}
+
+function setupSearch() {
+  document.querySelectorAll("[data-search-form]").forEach((form) => {
+    const url = new URL(location.href);
+
+    const qIn = form.elements.query;
+    const cSel = form.elements.category;
+    const lSel = form.elements.location;
+
+    if (qIn && url.searchParams.get("q")) qIn.value = url.searchParams.get("q");
+    if (cSel) setSelectValue(cSel, url.searchParams.get("category"));
+    if (lSel) setSelectValue(lSel, url.searchParams.get("location"));
+
+    const applyFilter = () => {
+      const filters = currentFilters(form);
+      const filtered = filterListings(filters);
+      renderListings(filtered);
+
+      const empty = document.querySelector("[data-empty-state]");
+      if (empty) empty.hidden = filtered.length > 0;
+
+      const count = document.querySelector("[data-result-count]");
+      if (count) count.textContent = `${filtered.length} item${filtered.length === 1 ? "" : "s"} found`;
+
+      document.querySelectorAll("[data-category-link]").forEach((a) =>
+        a.classList.toggle("is-selected",
+          normalise(a.dataset.categoryLink) === normalise(filters.category))
+      );
+
+      setBrowseUrl(filters);
+    };
+
+    form.addEventListener("submit", (e) => { e.preventDefault(); applyFilter(); });
+
+    if (form.hasAttribute("data-filter-form")) {
+      form.addEventListener("input", applyFilter);
+      form.addEventListener("change", applyFilter);
+      applyFilter();
+    }
+  });
+
+  document.querySelector("[data-clear-filters]")?.addEventListener("click", () => {
+    const form = document.querySelector("[data-filter-form]");
+    if (!form) return;
+    form.reset();
+    form.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
+
+/* ── favorites ── */
+function setupFavorites() {
+  document.querySelectorAll(".favorite-button").forEach((btn) => {
+    if (btn.dataset.ready) return;
+    btn.dataset.ready = "true";
+    btn.addEventListener("click", () => {
+      const on = btn.classList.toggle("is-active");
+      btn.textContent = on ? "♥" : "♡";
+    });
+  });
+}
+
+/* ── forms ── */
+function setupForms() {
+  document.querySelectorAll("[data-list-form], [data-contact-form]").forEach((form) => {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = form.querySelector("[data-form-success]");
+      if (msg) msg.hidden = false;
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+}
+
+/* ── scroll reveal ── */
+function setupRevealObserver() {
+  const obs = new IntersectionObserver(
+    (entries) => entries.forEach((en) => {
+      if (en.isIntersecting) {
+        en.target.classList.add("revealed");
+        obs.unobserve(en.target);
+      }
+    }),
+    { threshold: 0.06 }
+  );
+  document.querySelectorAll(".reveal-item:not(.revealed)").forEach((el) => obs.observe(el));
+}
+
+/* ── page transitions ── */
+function setupPageTransition() {
+  document.body.classList.add("page-entering");
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.body.classList.remove("page-entering");
+    document.body.classList.add("page-entered");
+  }));
+
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("http") ||
+        href.startsWith("//") || href.startsWith("mailto:") ||
+        href.startsWith("tel:") || link.target === "_blank" ||
+        link.hasAttribute("download")) return;
+    e.preventDefault();
+    document.body.classList.add("page-leaving");
+    setTimeout(() => { location.href = href; }, 260);
+  });
+}
+
+/* ══════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════ */
+
+async function init() {
+  setupTheme();
+  setupActiveNav();
+  setupPageTransition();
+
+  // Try loading from Google Sheet first, fall back to data.js
+  await loadFromSheet();
+
+  populateCategorySelects();
+  populateLocations();
+  populateCategoryGrids();
+  renderListings(window.RENTHUB_DATA.listings || []);
+  setupSearch();
+  setupForms();
+  setupRevealObserver();
+}
+
+init();
+</script>
+</body>
 </html>
