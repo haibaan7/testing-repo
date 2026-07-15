@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Browse local experience listings across the Maldives and contact providers directly." />
+    <meta name="theme-color" content="#2E9E39" />
+    <title>Experiences | RentHub.mv</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="experiences">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="top-nav">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle>
+          <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <div class="nav-links" id="primary-menu" data-menu>
+          <a href="index.html" data-nav-page="home">Home</a>
+          <a href="rentals.html" data-nav-page="rentals">Rentals</a>
+          <a href="experiences.html" data-nav-page="experiences">Experiences</a>
+          <a href="list.html" data-nav-page="list">List Your Rental</a>
+          <a href="contact.html" data-nav-page="contact">Contact</a>
+        </div>
+        <a class="nav-cta" href="list.html">List Your Rental</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="page-hero-inner reveal-item">
+          <p class="section-kicker">Experiences</p>
+          <h1>Discover local activities and island moments.</h1>
+          <p>Explore experience listings such as island tours, fishing trips, watersports, photography sessions, workshops, and local activities.</p>
+        </div>
+      </section>
+
+      <section class="filters-wrap" aria-label="Experience filters">
+        <form class="filter-panel" data-listing-filters="experiences">
+          <label class="filter-field">
+            <span>Search</span>
+            <input type="search" name="query" placeholder="Search activity, provider, or keyword" autocomplete="off" />
+          </label>
+          <label class="filter-field">
+            <span>Category</span>
+            <select name="category" data-category-options="experiences"></select>
+          </label>
+          <label class="filter-field">
+            <span>Location</span>
+            <select name="location" data-location-options="experiences"></select>
+          </label>
+          <button class="search-button" type="submit">Search</button>
+          <button class="clear-button" type="button" data-clear-filters>Clear Filters</button>
+        </form>
+      </section>
+
+      <div class="result-row">
+        <span data-result-count="experiences">0 experiences found</span>
+      </div>
+
+      <section class="section-shell section-stack" aria-label="Experience listings">
+        <div class="listing-grid" data-listings="experiences"></div>
+        <div class="empty-state" hidden data-empty-state="experiences">
+          <strong>No experiences match those filters.</strong>
+          <p>Try a broader search, a different category, or clear the filters.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <nav aria-label="Footer navigation">
+          <a href="index.html">Home</a>
+          <a href="rentals.html">Rentals</a>
+          <a href="list.html">List Your Rental</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p>&copy; 2026 RentHub.mv. Sample experience listings are placeholders until providers share real details.</p>
+      </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+# RentHub.mv Website Development Guidelines
+
+## Project Overview
+
+RentHub.mv is a listing and discovery platform for rentals and experiences in the Maldives.
+
+The platform does not process bookings or payments. Visitors discover listings and contact the owner or provider directly through WhatsApp, Instagram, phone, or other available contact methods.
+
+The website has two main listing types:
+
+1. Rentals
+   - Cameras
+   - Vehicles
+   - Tools
+   - Electronics
+   - Event equipment
+   - Boats
+   - Sports equipment
+   - Accommodation
+   - Other rentable items
+
+2. Experiences
+   - Island tours
+   - Fishing trips
+   - Watersports
+   - Car experiences
+   - Photography experiences
+   - Workshops
+   - Local activities
+   - Other listed experiences
+
+## Design Direction
+
+Create a clean, premium, minimalist interface optimized for:
+
+- iPhone
+- Mobile browsers
+- Safari
+- Apple devices
+- Tablets
+- Desktop screens
+
+The visual style should feel modern, calm, spacious, and interactive.
+
+Use:
+
+- White or very light backgrounds
+- RentHub green: #2E9E39
+- Dark neutral text
+- Light gray borders
+- Large rounded corners
+- Soft shadows
+- Smooth animations
+- Generous spacing
+- Clear typography
+- Large touch-friendly controls
+
+Avoid:
+
+- Cluttered layouts
+- Excessive text
+- Heavy gradients
+- Strong glassmorphism
+- Dark gaming-style interfaces
+- Too many category cards on the homepage
+- Small buttons
+- Distracting animations
+
+## Development Rules
+
+- Inspect the existing project structure before making changes.
+- Reuse existing components and data where practical.
+- Do not unnecessarily rewrite the entire website.
+- Keep all existing listing data and contact information working.
+- Do not add an online payment system.
+- Do not add an internal booking system.
+- Do not describe RentHub as handling reservations.
+- Owners and customers communicate directly.
+- Use semantic HTML and accessible controls.
+- Ensure keyboard navigation works.
+- Respect `prefers-reduced-motion`.
+- Avoid large animation libraries unless already installed.
+- Prefer lightweight CSS animations and JavaScript.
+- Do not use animations that negatively affect scrolling performance.
+- Avoid horizontal overflow on mobile.
+- Keep components reusable and code easy to maintain.
+
+## Responsive Requirements
+
+Design mobile-first.
+
+Test the interface at approximately:
+
+- 320px
+- 375px
+- 390px
+- 430px
+- 768px
+- 1024px
+- 1440px
+
+Buttons must have comfortable touch targets.
+
+Text must not overflow or become too small on narrow screens.
+
+The navigation, hero, listing cards, filters, modals, and menus must work properly on iPhone Safari.
+
+## Quality Checks
+
+Before finishing:
+
+- Run the project.
+- Check for console errors.
+- Test navigation between Home, Rentals, and Experiences.
+- Test all major buttons.
+- Test the mobile menu.
+- Check responsive layouts.
+- Check keyboard accessibility.
+- Confirm animations remain smooth.
+- Confirm listing contact links still work.
+- Confirm no booking or payment functionality was introduced.

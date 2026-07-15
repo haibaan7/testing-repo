@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="List a rental or experience on RentHub.mv." />
+    <meta name="theme-color" content="#2E9E39" />
+    <title>List Your Rental | RentHub.mv</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="list">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="top-nav">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle>
+          <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <div class="nav-links" id="primary-menu" data-menu>
+          <a href="index.html" data-nav-page="home">Home</a>
+          <a href="rentals.html" data-nav-page="rentals">Rentals</a>
+          <a href="experiences.html" data-nav-page="experiences">Experiences</a>
+          <a href="list.html" data-nav-page="list">List Your Rental</a>
+          <a href="contact.html" data-nav-page="contact">Contact</a>
+        </div>
+        <a class="nav-cta" href="list.html">List Your Rental</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="page-hero-inner reveal-item">
+          <p class="section-kicker">List on RentHub.mv</p>
+          <h1>Share a rental or experience people can contact you about.</h1>
+          <p>Send the details and RentHub.mv will help people discover your listing. All arrangements stay between you and the customer.</p>
+        </div>
+      </section>
+
+      <section class="section-shell section-stack list-layout" aria-label="Listing form">
+        <div class="form-card reveal-item">
+          <form class="listing-form" data-list-form>
+            <label class="form-field">
+              <span>Listing type</span>
+              <select name="type" required>
+                <option value="Rental">Rental</option>
+                <option value="Experience">Experience</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>Title</span>
+              <input name="title" type="text" placeholder="e.g. Honda scooter or sunset fishing trip" required />
+            </label>
+            <label class="form-field">
+              <span>Category</span>
+              <input name="category" type="text" placeholder="Vehicles, Photography, Fishing Trips..." />
+            </label>
+            <label class="form-field">
+              <span>Price</span>
+              <input name="price" type="text" placeholder="e.g. MVR 350/day" required />
+            </label>
+            <label class="form-field">
+              <span>Location</span>
+              <input name="location" type="text" placeholder="Island and atoll" required />
+            </label>
+            <label class="form-field">
+              <span>Direct contact</span>
+              <input name="contact" type="tel" placeholder="WhatsApp or phone number" required />
+            </label>
+            <label class="form-field">
+              <span>Description</span>
+              <textarea name="description" rows="5" placeholder="Tell people what is included, availability notes, and how to contact you." required></textarea>
+            </label>
+            <button class="search-button" type="submit">Send Listing Details</button>
+            <p class="form-success" data-form-success hidden>Thank you. A WhatsApp message has been prepared with your listing details.</p>
+          </form>
+        </div>
+
+        <aside class="note-card reveal-item">
+          <p class="section-kicker">What happens next</p>
+          <h2>RentHub.mv helps people discover you.</h2>
+          <p>Visitors browse your listing and contact you directly through the contact method you provide.</p>
+          <div class="steps-grid">
+            <article class="step-card">
+              <h3>1. Send details</h3>
+              <p>Share the title, price, location, photos, and contact information.</p>
+            </article>
+            <article class="step-card">
+              <h3>2. Get listed</h3>
+              <p>Your rental or experience can appear in the right browsing page.</p>
+            </article>
+            <article class="step-card">
+              <h3>3. Talk directly</h3>
+              <p>Customers message you. RentHub.mv does not handle bookings or payments.</p>
+            </article>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <nav aria-label="Footer navigation">
+          <a href="index.html">Home</a>
+          <a href="rentals.html">Rentals</a>
+          <a href="experiences.html">Experiences</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p>&copy; 2026 RentHub.mv. Discovery only. No booking or payment processing.</p>
+      </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
