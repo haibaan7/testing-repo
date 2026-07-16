@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Browse rental listings across the Maldives and contact owners directly." />
+    <meta name="theme-color" content="#2E9E39" />
+    <title>Browse Rentals | RentHub.mv</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="browse">
+    <header class="site-header" aria-label="Primary navigation">
+      <nav class="top-nav">
+        <a class="brand" href="index.html" aria-label="RentHub.mv home">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="primary-menu" aria-expanded="false" data-menu-toggle>
+          <span class="menu-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+        </button>
+        <div class="nav-links" id="primary-menu" data-menu>
+          <a href="index.html" data-nav-page="home">Home</a>
+          <a href="browse.html" data-nav-page="browse">Browse</a>
+          <a href="experiences.html" data-nav-page="experiences">Experiences</a>
+          <a href="how-it-works.html" data-nav-page="how">How It Works</a>
+          <a href="list.html" data-nav-page="list">List Your Rental</a>
+          <a href="contact.html" data-nav-page="contact">Contact</a>
+        </div>
+        <a class="nav-cta" href="list.html">List Your Rental</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>
+          <span class="theme-icon" aria-hidden="true"></span>
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="page-hero-inner reveal-item">
+          <p class="section-kicker">Browse Rentals</p>
+          <h1>Find practical rentals across the Maldives.</h1>
+          <p>Search current rental listings, compare details, and message the owner directly. RentHub.mv does not process bookings or payments.</p>
+        </div>
+      </section>
+
+      <section class="filters-wrap" aria-label="Rental filters">
+        <form class="filter-panel" data-listing-filters="rentals">
+          <label class="filter-field">
+            <span>Search</span>
+            <input type="search" name="query" placeholder="Search item, owner, or keyword" autocomplete="off" />
+          </label>
+          <label class="filter-field">
+            <span>Category</span>
+            <select name="category" data-category-options="rentals"></select>
+          </label>
+          <label class="filter-field">
+            <span>Location</span>
+            <select name="location" data-location-options="rentals"></select>
+          </label>
+          <button class="search-button" type="submit">Search</button>
+          <button class="clear-button" type="button" data-clear-filters>Clear Filters</button>
+        </form>
+      </section>
+
+      <div class="result-row">
+        <span data-result-count="rentals">0 rentals found</span>
+      </div>
+
+      <section class="section-shell section-stack" aria-label="Rental listings">
+        <div class="listing-grid" data-listings="rentals"></div>
+        <div class="empty-state" hidden data-empty-state="rentals">
+          <strong>No item found.</strong>
+          <p>Try a broader search, a different category, or clear the filters.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="photo-modal" hidden data-photo-modal role="dialog" aria-modal="true" aria-labelledby="photo-modal-title">
+      <div class="photo-modal-panel">
+        <div class="photo-modal-header">
+          <strong id="photo-modal-title" data-photo-modal-title>Listing photo</strong>
+          <button class="modal-close" type="button" aria-label="Close photo" data-photo-modal-close>Close</button>
+        </div>
+        <img src="assets/logo.png" alt="Listing photo" data-photo-modal-image />
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a class="brand" href="index.html">
+          <span class="brand-mark"><img src="assets/logo.png" alt="" /></span>
+          <span>RentHub.mv</span>
+        </a>
+        <nav aria-label="Footer navigation">
+          <a href="index.html">Home</a>
+          <a href="experiences.html">Experiences</a>
+          <a href="list.html">List Your Rental</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <p>&copy; 2026 RentHub.mv. Browse listings and contact owners directly.</p>
+      </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
