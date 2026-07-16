@@ -5,8 +5,10 @@ const data = window.RENTHUB_DATA || {
   experiences: []
 };
 
+const root = document.documentElement;
 const page = document.body.dataset.page || "home";
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
 
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => ({
@@ -26,9 +28,44 @@ function uniqueValues(items, key) {
   return [...new Set(items.map((item) => item[key]).filter(Boolean))].sort();
 }
 
+function islandLabel(island) {
+  return `${island.name} (${island.atoll})`;
+}
+
 function toWhatsAppPhone(phone) {
   const digits = String(phone || "").replace(/\D/g, "");
   return digits.length === 7 ? `960${digits}` : digits;
+}
+
+function setTheme(theme) {
+  root.dataset.theme = theme;
+  try {
+    localStorage.setItem("renthub-theme", theme);
+  } catch (error) {
+    // Some privacy modes block storage. The visual theme still applies.
+  }
+
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) {
+    themeMeta.setAttribute("content", theme === "dark" ? "#0B1220" : "#2E9E39");
+  }
+}
+
+function setupTheme() {
+  let savedTheme = "";
+  try {
+    savedTheme = localStorage.getItem("renthub-theme") || "";
+  } catch (error) {
+    savedTheme = "";
+  }
+
+  setTheme(savedTheme || (prefersDark.matches ? "dark" : "light"));
+
+  document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+    });
+  });
 }
 
 function setupActiveNavigation() {
@@ -153,8 +190,28 @@ function populateFilters(type, items) {
 
   document.querySelectorAll(`[data-location-options="${type}"]`).forEach((select) => {
     const current = select.value;
-    select.innerHTML = createOptions(uniqueValues(items, "location"), "Any location");
+    const values =
+      type === "rentals" && Array.isArray(data.islands) && data.islands.length
+        ? data.islands.map(islandLabel)
+        : uniqueValues(items, "location");
+    select.innerHTML = createOptions(values, "Any location");
     select.value = current;
+  });
+}
+
+function populateListingFormOptions() {
+  const categories = [...data.categories, ...data.experienceCategories].map((category) => category.value);
+  document.querySelectorAll("[data-form-category-options]").forEach((select) => {
+    const current = select.value;
+    select.innerHTML = createOptions([...new Set(categories)].sort(), "Select category");
+    select.value = current;
+  });
+
+  const islandOptions = (data.islands || [])
+    .map((island) => `<option value="${escapeHtml(islandLabel(island))}"></option>`)
+    .join("");
+  document.querySelectorAll("[data-island-datalist]").forEach((datalist) => {
+    datalist.innerHTML = islandOptions;
   });
 }
 
@@ -171,7 +228,14 @@ function itemMatches(item, filters) {
 
   const queryOk = !filters.query || normalise(searchText).includes(normalise(filters.query));
   const categoryOk = !filters.category || normalise(item.category) === normalise(filters.category);
-  const locationOk = !filters.location || normalise(item.location) === normalise(filters.location);
+  const filterLocation = normalise(filters.location);
+  const filterIslandName = normalise(String(filters.location || "").replace(/\s*\(.*\)$/, ""));
+  const itemLocation = normalise(item.location);
+  const locationOk =
+    !filters.location ||
+    itemLocation === filterLocation ||
+    itemLocation.startsWith(`${filterIslandName} `) ||
+    itemLocation.includes(filterIslandName);
   return queryOk && categoryOk && locationOk;
 }
 
@@ -239,17 +303,19 @@ function renderExperienceCard(experience) {
 function renderCards(type, items, target) {
   const renderer = type === "experiences" ? renderExperienceCard : renderRentalCard;
   target.innerHTML = items.map(renderer).join("");
+  setupInteractiveButtons();
+  setupHomeWaterRipples();
   setupSaveButtons();
   setupPhotoModal();
   setupRevealObserver();
 }
 
-function setupFeaturedGrids() {
-  document.querySelectorAll("[data-featured-rentals]").forEach((grid) => {
+function setupHomeRentalGrids() {
+  document.querySelectorAll("[data-home-rentals]").forEach((grid) => {
     renderCards("rentals", data.listings.slice(0, Number(grid.dataset.limit || 3)), grid);
   });
 
-  document.querySelectorAll("[data-featured-experiences]").forEach((grid) => {
+  document.querySelectorAll("[data-home-experiences]").forEach((grid) => {
     renderCards("experiences", data.experiences.slice(0, Number(grid.dataset.limit || 3)), grid);
   });
 }
@@ -343,6 +409,88 @@ function setupPhotoModal() {
   modal.dataset.ready = "true";
 }
 
+function setupFaqAccordion() {
+  document.querySelectorAll("[data-faq]").forEach((faq) => {
+    if (faq.dataset.ready) return;
+    faq.dataset.ready = "true";
+
+    faq.querySelectorAll(".hiw-faq-question").forEach((button) => {
+      const item = button.closest(".hiw-faq-item");
+      if (!item) return;
+
+      button.setAttribute("aria-expanded", String(item.classList.contains("is-open")));
+      button.addEventListener("click", () => {
+        const isOpen = item.classList.toggle("is-open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+    });
+  });
+}
+
+function setupInteractiveButtons() {
+  const selector = ".button, .contact-button, .secondary-action, .search-button, .clear-button";
+
+  document.querySelectorAll(selector).forEach((button) => {
+    if (button.dataset.interactiveReady) return;
+    button.dataset.interactiveReady = "true";
+
+    const setPressPoint = (clientX, clientY) => {
+      const rect = button.getBoundingClientRect();
+      button.style.setProperty("--press-x", `${clientX - rect.left}px`);
+      button.style.setProperty("--press-y", `${clientY - rect.top}px`);
+    };
+
+    const pulse = () => {
+      button.classList.remove("is-pressing");
+      void button.offsetWidth;
+      button.classList.add("is-pressing");
+      window.setTimeout(() => button.classList.remove("is-pressing"), 560);
+    };
+
+    button.addEventListener("pointermove", (event) => {
+      if (!window.matchMedia("(pointer: fine)").matches) return;
+      setPressPoint(event.clientX, event.clientY);
+    });
+
+    button.addEventListener("pointerdown", (event) => {
+      if (button.matches(":disabled, [aria-disabled='true']")) return;
+      setPressPoint(event.clientX, event.clientY);
+      pulse();
+    });
+
+    button.addEventListener("keydown", (event) => {
+      if (button.matches(":disabled, [aria-disabled='true']")) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const rect = button.getBoundingClientRect();
+      setPressPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      pulse();
+    });
+  });
+}
+
+function setupHomeWaterRipples() {
+  if (page !== "home" || prefersReducedMotion.matches) return;
+
+  const selector = ".hero-choice, .intro-panel, .stat-card, .listing-card, .step-card, .cta-band";
+  document.querySelectorAll(selector).forEach((surface) => {
+    if (surface.dataset.waterRippleReady) return;
+    surface.dataset.waterRippleReady = "true";
+
+    const setRipplePoint = (event) => {
+      const rect = surface.getBoundingClientRect();
+      surface.style.setProperty("--water-x", `${event.clientX - rect.left}px`);
+      surface.style.setProperty("--water-y", `${event.clientY - rect.top}px`);
+    };
+
+    surface.addEventListener("pointerenter", setRipplePoint);
+    surface.addEventListener("pointermove", setRipplePoint);
+    surface.addEventListener("pointerleave", () => {
+      surface.style.removeProperty("--water-x");
+      surface.style.removeProperty("--water-y");
+    });
+  });
+}
+
 function setupForms() {
   document.querySelectorAll("[data-list-form], [data-contact-form]").forEach((form) => {
     form.addEventListener("submit", (event) => {
@@ -367,12 +515,17 @@ function setupForms() {
   });
 }
 
+setupTheme();
 setupActiveNavigation();
 setupMobileMenu();
 setupPageTransition();
 setupHeroDepth();
-setupFeaturedGrids();
+populateListingFormOptions();
+setupHomeRentalGrids();
 setupListingFilters("rentals");
 setupListingFilters("experiences");
+setupFaqAccordion();
+setupInteractiveButtons();
+setupHomeWaterRipples();
 setupForms();
 setupRevealObserver();
