@@ -2153,6 +2153,91 @@ body[data-page="how"] .hiw-cta:hover {
   }
 }
 
+@media (max-width: 559px) {
+  body[data-page="browse"] .listing-grid[data-listings],
+  body[data-page="experiences"] .listing-grid[data-listings] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-card,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-card {
+    border-radius: 18px;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-card-body,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-card-body {
+    padding: 12px;
+    gap: 9px;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-card h3,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-card h3 {
+    font-size: 0.94rem;
+    line-height: 1.12;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-card p,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-card p {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-meta,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-meta {
+    gap: 6px;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .badge,
+  body[data-page="experiences"] .listing-grid[data-listings] .badge {
+    min-height: 24px;
+    padding: 4px 8px;
+    font-size: 0.68rem;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .listing-meta strong,
+  body[data-page="experiences"] .listing-grid[data-listings] .listing-meta strong {
+    font-size: 0.78rem;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .detail-list,
+  body[data-page="experiences"] .listing-grid[data-listings] .detail-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .detail-list dt,
+  body[data-page="experiences"] .listing-grid[data-listings] .detail-list dt {
+    font-size: 0.66rem;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .detail-list dd,
+  body[data-page="experiences"] .listing-grid[data-listings] .detail-list dd {
+    font-size: 0.76rem;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .contact-button,
+  body[data-page="browse"] .listing-grid[data-listings] .secondary-action,
+  body[data-page="experiences"] .listing-grid[data-listings] .contact-button,
+  body[data-page="experiences"] .listing-grid[data-listings] .secondary-action {
+    min-height: 40px;
+    padding: 0 8px;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
+  }
+
+  body[data-page="browse"] .listing-grid[data-listings] .save-button,
+  body[data-page="experiences"] .listing-grid[data-listings] .save-button {
+    top: 8px;
+    right: 8px;
+    width: 34px;
+    height: 34px;
+    font-size: 0.72rem;
+  }
+}
+
 @media (min-width: 560px) {
   .hero-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
